@@ -2,6 +2,7 @@ package red.jackf.lenientdeath.mixins.itemresilience;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -42,14 +43,14 @@ public abstract class ItemEntityMixin extends Entity implements LDDeathDropMarka
     }
 
     // read grounded position
-    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void loadDeathDropMark(CompoundTag tag, CallbackInfo ci) {
-        this.isDeathDropItem = tag.getBoolean(IS_DEATH_DROP_ITEM).orElse(false);
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
+    private void loadDeathDropMark(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
+        this.isDeathDropItem = tag.getBoolean(IS_DEATH_DROP_ITEM);
     }
 
     // save grounded position
-    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void saveDeathDropMark(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
+    private void saveDeathDropMark(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
         tag.putBoolean(IS_DEATH_DROP_ITEM, this.isDeathDropItem);
     }
 
