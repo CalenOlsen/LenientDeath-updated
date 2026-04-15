@@ -2,6 +2,7 @@ package red.jackf.lenientdeath.mixins.movetooriginalslots;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.Entity;
@@ -42,15 +43,15 @@ public abstract class ItemEntityMixin extends Entity implements LDRemembersSlot 
         this.slot = OptionalInt.of(slot);
     }
 
-    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void lenientdeath$getModData(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
+    private void lenientdeath$getModData(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
         if (tag.contains(LD_REMEMBERED_SLOT, Tag.TAG_INT)) {
             this.slot = OptionalInt.of(tag.getInt(LD_REMEMBERED_SLOT));
         }
     }
 
-    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void lenientdeath$addModData(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
+    private void lenientdeath$addModData(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
         if (slot.isPresent()) {
             tag.putInt(LD_REMEMBERED_SLOT, slot.getAsInt());
         }
