@@ -4,13 +4,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import red.jackf.lenientdeath.mixins.movetooriginalslots.InventoryAccessor;
 
 public interface Util {
     private static boolean isValidSlot(Inventory inventory, int slot) {
-        int sum = 0;
-        for (var compartment : ((InventoryAccessor) inventory).getCompartments()) sum += compartment.size();
-        return slot >= 0 && slot < sum;
+        return slot >= 0 && slot < inventory.getContainerSize();
     }
 
     static boolean tryAddToInventory(Inventory target, ItemStack stack, int slot) {
