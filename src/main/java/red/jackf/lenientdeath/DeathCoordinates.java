@@ -35,7 +35,7 @@ public class DeathCoordinates {
 
         if (config.sendToOtherAdmins) {
             for (var otherPlayer : server.getPlayerList().getPlayers()) {
-                if (otherPlayer != deadPlayer && server.getPlayerList().isOp(otherPlayer.getGameProfile())) {
+                if (otherPlayer != deadPlayer && otherPlayer.hasPermissions(2)) {
                     otherPlayer.sendSystemMessage(othersMessage);
                 }
             }

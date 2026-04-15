@@ -24,7 +24,7 @@ public abstract class ServerPlayerMixin extends Player implements LDPerPlayer {
             BlockPos pos,
             float yRot,
             GameProfile gameProfile) {
-        super(level, pos, yRot, gameProfile);
+        super(level, gameProfile);
     }
 
     @Override
@@ -39,7 +39,7 @@ public abstract class ServerPlayerMixin extends Player implements LDPerPlayer {
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
     private void lenientdeath$getModData(CompoundTag tag, CallbackInfo ci) {
-        this.perPlayerEnabledForMe = tag.getBoolean(PER_PLAYER_TAG_KEY);
+        this.perPlayerEnabledForMe = tag.getBoolean(PER_PLAYER_TAG_KEY).orElse(this.perPlayerEnabledForMe);
     }
 
     @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))

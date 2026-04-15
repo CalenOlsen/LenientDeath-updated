@@ -15,6 +15,6 @@ public class NbtChecker {
         if (!config.enabled) return null;
         var tag = stack.get(DataComponents.CUSTOM_DATA);
         if (tag == null) return null;
-        return tag.copyTag().getBoolean(config.nbtKey);
+        return tag.copyTag().getBoolean(config.nbtKey).orElse(null);
     }
 }

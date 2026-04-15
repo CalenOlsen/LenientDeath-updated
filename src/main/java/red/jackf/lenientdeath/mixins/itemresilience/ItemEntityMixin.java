@@ -44,7 +44,7 @@ public abstract class ItemEntityMixin extends Entity implements LDDeathDropMarka
     // read grounded position
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
     private void loadDeathDropMark(CompoundTag tag, CallbackInfo ci) {
-        this.isDeathDropItem = tag.getBoolean(IS_DEATH_DROP_ITEM);
+        this.isDeathDropItem = tag.getBoolean(IS_DEATH_DROP_ITEM).orElse(false);
     }
 
     // save grounded position
