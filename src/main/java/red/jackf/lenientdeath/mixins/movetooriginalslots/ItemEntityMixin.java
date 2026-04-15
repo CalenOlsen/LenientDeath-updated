@@ -33,9 +33,7 @@ public abstract class ItemEntityMixin extends Entity implements LDRemembersSlot 
 
     @Unique
     private static boolean isValidSlot(Inventory inventory, int slot) {
-        int sum = 0;
-        for (var compartment : ((InventoryAccessor) inventory).getCompartments()) sum += compartment.size();
-        return slot >= 0 && slot < sum;
+        return slot >= 0 && slot < inventory.getContainerSize();
     }
 
     @Override
