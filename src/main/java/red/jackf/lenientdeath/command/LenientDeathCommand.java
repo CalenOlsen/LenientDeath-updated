@@ -16,7 +16,7 @@ public class LenientDeathCommand {
     public static final Predicate<CommandSourceStack> IS_INTEGRATED_HOST_PREDICATE = stack -> {
         var player = stack.getPlayer();
         if (player == null) return false;
-        return stack.getServer().isSingleplayerOwner(player.getGameProfile());
+        return stack.hasPermission(4);
     };
 
     public LenientDeathCommand(

@@ -32,9 +32,7 @@ public abstract class ItemEntityMixin extends Entity implements LDRemembersSlot 
 
     @Unique
     private static boolean isValidSlot(Inventory inventory, int slot) {
-        int sum = 0;
-        for (var compartment : ((InventoryAccessor) inventory).getCompartments()) sum += compartment.size();
-        return slot >= 0 && slot < sum;
+        return slot >= 0 && slot < inventory.getContainerSize();
     }
 
     @Override
@@ -44,8 +42,8 @@ public abstract class ItemEntityMixin extends Entity implements LDRemembersSlot 
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
     private void lenientdeath$getModData(CompoundTag tag, CallbackInfo ci) {
-        if (tag.contains(LD_REMEMBERED_SLOT, Tag.TAG_INT)) {
-            this.slot = OptionalInt.of(tag.getInt(LD_REMEMBERED_SLOT));
+        if (tag.contains(LD_REMEMBERED_SLOT)) {
+            this.slot = tag.getInt(LD_REMEMBERED_SLOT).stream().findFirst().map(OptionalInt::of).orElse(OptionalInt.empty());
         }
     }
 
@@ -64,7 +62,7 @@ public abstract class ItemEntityMixin extends Entity implements LDRemembersSlot 
                 && inventory.getItem(this.slot.getAsInt()).isEmpty() // remembered slot is empty
                 && isValidSlot(inventory, this.slot.getAsInt())) { // not out of range
             // delegate to items specific method so we don't have to worry about stack splitting
-            if (this.slot.getAsInt() < inventory.items.size()) {
+            if (this.slot.getAsInt() < inventory.getContainerSize()) {
                 return inventory.add(this.slot.getAsInt(), stack);
             } else {
                 // item pickup method uses an empty stack to know when to remove the item entity; it restores the count afterwards
