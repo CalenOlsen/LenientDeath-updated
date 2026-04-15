@@ -41,3 +41,8 @@ Default disabled, but can be enabled:
 - Death Coordinates: send to team
 
 - Icon, current one is bad
+
+## Developer Note (1.21.10 mappings)
+
+When targeting the current branch's Minecraft mappings, `ServerPlayer#getServer()` is not available.
+Use the `server` field directly (`player.server`) when you need `MinecraftServer`.
