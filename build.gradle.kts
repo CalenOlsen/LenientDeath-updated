@@ -106,10 +106,6 @@ repositories {
 		}
 	}
 
-	// Local jars (e.g. manual CCA testing)
-	flatDir {
-		dirs("libs")
-	}
 }
 
 java {
@@ -170,12 +166,6 @@ dependencies {
 		isTransitive = false
 	}
 	modCompileOnly("org.ladysnake.cardinal-components-api:cardinal-components-entity:${properties["cca_version"]}") {
-		isTransitive = false
-	}
-	modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${properties["cca_version"]}") {
-		isTransitive = false
-	}
-	modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${properties["cca_version"]}") {
 		isTransitive = false
 	}
 
