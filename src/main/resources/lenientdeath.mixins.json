@@ -10,7 +10,6 @@
     "itemlifeextender.ItemEntityAccessor",
     "itemresilience.ItemEntityMixin",
     "itemresilience.ServerPlayerMixin",
-    "movetooriginalslots.InventoryAccessor",
     "movetooriginalslots.ItemEntityMixin",
     "perplayer.ServerPlayerMixin",
     "preserveexperience.LivingEntityMixin"
