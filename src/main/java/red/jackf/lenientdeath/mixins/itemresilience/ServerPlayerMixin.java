@@ -7,6 +7,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -87,8 +88,8 @@ public abstract class ServerPlayerMixin extends Player implements LDGroundedPosH
     }
 
     // save grounded position
-    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void saveGroundedPos(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
+    private void saveGroundedPos(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
         if (this.lastGroundedPos != null)
             GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.lastGroundedPos)
                     .resultOrPartial(LenientDeath.LOGGER::error)
