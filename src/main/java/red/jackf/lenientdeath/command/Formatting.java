@@ -18,14 +18,11 @@ public class Formatting {
 
 
     public static Style runCommand(Style base, String command) {
-        return base
-                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
-                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, literal(command)));
+        return base;
     }
 
     private static MutableComponent colour(String text, int colour, boolean bold) {
-        Style base = Style.EMPTY.withHoverEvent(HoverEvent.showText(Component.translatable("lenientdeath.title")))
-                .withBold(bold);
+        Style base = Style.EMPTY.withBold(bold);
         return literal(text).withStyle(base.withColor(colour));
     }
 

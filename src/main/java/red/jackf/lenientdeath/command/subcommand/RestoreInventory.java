@@ -156,7 +156,7 @@ public class RestoreInventory {
         else if (seconds < 86400) component = Component.translatable("lenientdeath.command.restoreInventory.time.hoursAgo", seconds / 3600);
         else component = Component.translatable("lenientdeath.command.restoreInventory.time.daysAgo", seconds / 86400);
 
-        component.setStyle(Formatting.VARIABLE.withHoverEvent(HoverEvent.showText(Component.literal(HOVER_FORMAT.format(time)))));
+        component.setStyle(Formatting.VARIABLE);
 
         return component;
     }
@@ -199,9 +199,7 @@ public class RestoreInventory {
         String teleportCommand = "/execute in " + dimensionText + " run tp @s " + positionText.replace(",", "");
 
         Component position = ComponentUtils.wrapInSquareBrackets(Component.literal(positionText)
-                .withStyle(Formatting.VARIABLE
-                        .withHoverEvent(HoverEvent.showText(Component.translatable("chat.coordinates.tooltip")))
-                        .withClickEvent(ClickEvent.suggestCommand(teleportCommand)))).withStyle(Formatting.SUCCESS);
+                .withStyle(Formatting.VARIABLE)).withStyle(Formatting.SUCCESS);
 
         MutableComponent secondLine = Component.literal(spacer)
                 .append(Component.translatable("lenientdeath.command.restoreInventory.timeAndPosition",
@@ -215,14 +213,10 @@ public class RestoreInventory {
         String replaceCommand = restoreCommand + " replace";
 
         Component restoreButton = ComponentUtils.wrapInSquareBrackets(Component.translatable("lenientdeath.command.restoreInventory.restore"))
-                .withStyle(Formatting.SUCCESS
-                        .withHoverEvent(HoverEvent.showText(Component.translatable("lenientdeath.command.restoreInventory.restore.hover")))
-                        .withClickEvent(ClickEvent.suggestCommand(restoreCommand)));
+                .withStyle(Formatting.SUCCESS);
 
         Component replaceButton = ComponentUtils.wrapInSquareBrackets(Component.translatable("lenientdeath.command.restoreInventory.replace"))
-                .withStyle(Formatting.ERROR
-                        .withHoverEvent(HoverEvent.showText(Component.translatable("lenientdeath.command.restoreInventory.replace.hover")))
-                        .withClickEvent(ClickEvent.suggestCommand(replaceCommand)));
+                .withStyle(Formatting.ERROR);
 
         long mainCount = countItems(record.inventory());
         long trinketsCount = record.trinketsInventory().map(RestoreInventory::countTrinkets).orElse(0L);
