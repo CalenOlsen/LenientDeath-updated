@@ -19,8 +19,8 @@ public class Formatting {
 
     public static Style runCommand(Style base, String command) {
         return base
-                .withClickEvent(ClickEvent.runCommand(command))
-                .withHoverEvent(HoverEvent.showText(literal(command)));
+                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
+                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, literal(command)));
     }
 
     private static MutableComponent colour(String text, int colour, boolean bold) {

@@ -41,10 +41,10 @@ public abstract class ItemEntityMixin extends Entity implements LDRemembersSlot 
         this.slot = OptionalInt.of(slot);
     }
 
-    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
-    private void lenientdeath$getModData(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
-        if (tag.contains(LD_REMEMBERED_SLOT, Tag.TAG_INT)) {
-            this.slot = OptionalInt.of(tag.getInt(LD_REMEMBERED_SLOT));
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
+    private void lenientdeath$getModData(CompoundTag tag, CallbackInfo ci) {
+        if (tag.contains(LD_REMEMBERED_SLOT)) {
+            this.slot = tag.getInt(LD_REMEMBERED_SLOT).stream().findFirst().map(OptionalInt::of).orElse(OptionalInt.empty());
         }
     }
 

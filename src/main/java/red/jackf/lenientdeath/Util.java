@@ -12,12 +12,8 @@ public interface Util {
 
     static boolean tryAddToInventory(Inventory target, ItemStack stack, int slot) {
         if (isValidSlot(target, slot) && target.getItem(slot).isEmpty()) {
-            if (slot < target.items.size()) {
-                return target.add(slot, stack);
-            } else {
-                target.setItem(slot, stack.copyAndClear());
-                return true;
-            }
+            target.setItem(slot, stack.copyAndClear());
+            return true;
         }
 
         return target.add(stack);

@@ -38,9 +38,9 @@ public abstract class ServerPlayerMixin extends Player implements LDPerPlayer {
         this.perPlayerEnabledForMe = newValue;
     }
 
-    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
-    private void lenientdeath$getModData(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
-        this.perPlayerEnabledForMe = tag.getBoolean(PER_PLAYER_TAG_KEY);
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
+    private void lenientdeath$getModData(CompoundTag tag, CallbackInfo ci) {
+        this.perPlayerEnabledForMe = tag.getBoolean(PER_PLAYER_TAG_KEY).orElse(this.perPlayerEnabledForMe);
     }
 
     @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))

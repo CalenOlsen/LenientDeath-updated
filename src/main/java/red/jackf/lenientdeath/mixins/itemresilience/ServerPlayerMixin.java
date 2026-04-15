@@ -78,12 +78,13 @@ public abstract class ServerPlayerMixin extends Player implements LDGroundedPosH
     }
 
     // read grounded position
-    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
-    private void loadGroundedPos(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
-        if (tag.contains(LAST_GROUNDED_POS, Tag.TAG_COMPOUND))
-            this.lastGroundedPos = GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.getCompound(LAST_GROUNDED_POS))
-                    .resultOrPartial(LenientDeath.LOGGER::error)
-                    .orElse(null);
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
+    private void loadGroundedPos(CompoundTag tag, CallbackInfo ci) {
+        if (tag.contains(LAST_GROUNDED_POS))
+            tag.getCompound(LAST_GROUNDED_POS).ifPresent(compound ->
+                    this.lastGroundedPos = GlobalPos.CODEC.parse(NbtOps.INSTANCE, compound)
+                            .resultOrPartial(LenientDeath.LOGGER::error)
+                            .orElse(null));
     }
 
     // save grounded position

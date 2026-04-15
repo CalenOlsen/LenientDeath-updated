@@ -166,16 +166,17 @@ dependencies {
 	modCompileOnly("dev.emi:trinkets:${properties["trinkets_version"]}") {
 		isTransitive = false
 	}
-	val localCcaJar = file("libs/cardinal-components-api-${properties["cca_version"]}.jar")
-	if (localCcaJar.exists()) {
-		modCompileOnly(files(localCcaJar))
-	} else {
-		modCompileOnly("org.ladysnake.cardinal-components-api:cardinal-components-base:${properties["cca_version"]}") {
-			isTransitive = false
-		}
-		modCompileOnly("org.ladysnake.cardinal-components-api:cardinal-components-entity:${properties["cca_version"]}") {
-			isTransitive = false
-		}
+	modCompileOnly("org.ladysnake.cardinal-components-api:cardinal-components-base:${properties["cca_version"]}") {
+		isTransitive = false
+	}
+	modCompileOnly("org.ladysnake.cardinal-components-api:cardinal-components-entity:${properties["cca_version"]}") {
+		isTransitive = false
+	}
+	modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${properties["cca_version"]}") {
+		isTransitive = false
+	}
+	modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${properties["cca_version"]}") {
+		isTransitive = false
 	}
 
 	//modLocalRuntime("dev.emi:trinkets:${properties["trinkets_version"]}")
