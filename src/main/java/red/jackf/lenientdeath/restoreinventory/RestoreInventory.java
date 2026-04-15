@@ -27,7 +27,7 @@ public class RestoreInventory {
     }
 
     private static Path getPlayerDeathHistoryPath(ServerPlayer player) {
-        return getDeathHistoryDir(player.server).resolve(player.getStringUUID() + ".dat");
+        return getDeathHistoryDir(player.getServer()).resolve(player.getStringUUID() + ".dat");
     }
 
     public List<DeathRecord> getDeathHistory(ServerPlayer player) {
@@ -44,8 +44,8 @@ public class RestoreInventory {
             }
         }
 
-        if (data != null && data.contains(DEATHS, CompoundTag.TAG_LIST)) {
-            ListTag list = data.getList(DEATHS, Tag.TAG_COMPOUND);
+        if (data != null && data.contains(DEATHS)) {
+            ListTag list = data.getList(DEATHS).orElseGet(ListTag::new);
 
             for (Tag tag : list) {
                 if (tag instanceof CompoundTag recordTag) {
@@ -68,7 +68,7 @@ public class RestoreInventory {
         }
 
         try {
-            Path directory = getDeathHistoryDir(player.server);
+            Path directory = getDeathHistoryDir(player.getServer());
             Files.createDirectories(directory);
             Path temp = Files.createTempFile(directory, player.getStringUUID() + "-", ".dat");
             NbtIo.writeCompressed(root, temp);

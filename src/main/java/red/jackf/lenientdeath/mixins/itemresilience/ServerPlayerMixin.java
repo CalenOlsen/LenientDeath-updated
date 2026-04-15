@@ -52,7 +52,7 @@ public abstract class ServerPlayerMixin extends Player implements LDGroundedPosH
     private @Nullable DeathContext deathContext = null;
 
     public ServerPlayerMixin(Level level, BlockPos pos, float yRot, GameProfile gameProfile) {
-        super(level, pos, yRot, gameProfile);
+        super(level, gameProfile);
     }
 
     // last grounded pos set/get

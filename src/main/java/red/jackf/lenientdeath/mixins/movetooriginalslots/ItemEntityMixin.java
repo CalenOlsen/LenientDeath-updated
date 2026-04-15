@@ -63,7 +63,7 @@ public abstract class ItemEntityMixin extends Entity implements LDRemembersSlot 
                 && inventory.getItem(this.slot.getAsInt()).isEmpty() // remembered slot is empty
                 && isValidSlot(inventory, this.slot.getAsInt())) { // not out of range
             // delegate to items specific method so we don't have to worry about stack splitting
-            if (this.slot.getAsInt() < inventory.items.size()) {
+            if (this.slot.getAsInt() < inventory.getContainerSize()) {
                 return inventory.add(this.slot.getAsInt(), stack);
             } else {
                 // item pickup method uses an empty stack to know when to remove the item entity; it restores the count afterwards

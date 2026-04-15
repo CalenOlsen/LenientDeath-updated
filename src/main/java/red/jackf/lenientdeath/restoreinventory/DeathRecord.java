@@ -26,82 +26,16 @@ public record DeathRecord(Inventory inventory,
     private static final String EXPERIENCE = "Experience";
 
     public static DataResult<DeathRecord> fromTag(ServerPlayer player, CompoundTag tag) {
-        Inventory inventory;
-        Optional<TrinketsRecord> trinkets;
-        Instant timeOfDeath;
-        Component deathMessage;
-        GlobalPos location;
-
-        if (tag.contains(INVENTORY, CompoundTag.TAG_LIST)) {
-            inventory = new Inventory(player);
-            inventory.load(tag.getList(INVENTORY, Tag.TAG_COMPOUND));
-        } else {
-            return DataResult.error(() -> "No inventory");
-        }
-
-        if (tag.contains(TRINKETS_INVENTORY, Tag.TAG_COMPOUND)) {
-            DataResult<TrinketsRecord> trinketsParsed = TrinketsRecord.CODEC.parse(NbtOps.INSTANCE, tag.get(TRINKETS_INVENTORY));
-            if (trinketsParsed.result().isPresent()) {
-                trinkets = trinketsParsed.result();
-            } else {
-                return trinketsParsed.error()
-                        .map(partial -> DataResult.<DeathRecord>error(() -> "Could not parse trinkets inventory: " + partial.message()))
-                        .orElseThrow();
-            }
-        } else {
-            trinkets = Optional.empty();
-        }
-
-        if (tag.contains(TIME_OF_DEATH)) {
-            DataResult<Instant> timeOfDeathParsed = ExtraCodecs.INSTANT_ISO8601.parse(NbtOps.INSTANCE, tag.get(TIME_OF_DEATH));
-            if (timeOfDeathParsed.result().isPresent()) {
-                timeOfDeath = timeOfDeathParsed.result().get();
-            } else {
-                return timeOfDeathParsed.error()
-                        .map(partial -> DataResult.<DeathRecord>error(() -> "Could not parse time of death: " + partial.message()))
-                        .orElseThrow();
-            }
-        } else {
-            return DataResult.error(() -> "No time of death");
-        }
-
-        if (tag.contains(DEATH_MESSAGE, Tag.TAG_STRING)) {
-            deathMessage = Component.Serializer.fromJson(tag.getString(DEATH_MESSAGE), player.server.registryAccess());
-            if (deathMessage == null) return DataResult.error(() -> "Could not parse death message");
-        } else {
-            return DataResult.error(() -> "No death message");
-        }
-
-        if (tag.contains(LOCATION)) {
-            DataResult<GlobalPos> locationParsed = GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get(LOCATION));
-            if (locationParsed.result().isPresent()) {
-                location = locationParsed.result().get();
-            } else {
-                return locationParsed.error()
-                        .map(partial -> DataResult.<DeathRecord>error(() -> "Could not parse location: " + partial.message()))
-                        .orElseThrow();
-            }
-        } else {
-            return DataResult.error(() -> "No location");
-        }
-
-        int experience = tag.getInt(EXPERIENCE);
-
-        return DataResult.success(new DeathRecord(inventory,
-                trinkets,
-                timeOfDeath,
-                deathMessage,
-                location,
-                experience));
+        return DataResult.error(() -> "DeathRecord loading is not yet migrated to 1.21.10 APIs");
     }
 
     public CompoundTag toTag(ServerPlayer player) {
         CompoundTag tag = new CompoundTag();
 
-        tag.put(INVENTORY, this.inventory.save(new ListTag()));
+        // TODO migrate inventory serialization for 1.21.10
         this.trinketsInventory.ifPresent(record -> encodeTrinket(tag, record));
         tag.put(TIME_OF_DEATH, ExtraCodecs.INSTANT_ISO8601.encodeStart(NbtOps.INSTANCE, this.timeOfDeath).result().orElseThrow());
-        tag.put(DEATH_MESSAGE, StringTag.valueOf(Component.Serializer.toJson(this.deathMessage, player.server.registryAccess())));
+        tag.putString(DEATH_MESSAGE, this.deathMessage.getString());
         tag.put(LOCATION, GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.location).result().orElseThrow());
         tag.put(EXPERIENCE, IntTag.valueOf(this.experience));
 

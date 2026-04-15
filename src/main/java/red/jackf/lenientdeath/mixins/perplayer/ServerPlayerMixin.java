@@ -25,7 +25,7 @@ public abstract class ServerPlayerMixin extends Player implements LDPerPlayer {
             BlockPos pos,
             float yRot,
             GameProfile gameProfile) {
-        super(level, pos, yRot, gameProfile);
+        super(level, gameProfile);
     }
 
     @Override

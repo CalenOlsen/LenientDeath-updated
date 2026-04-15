@@ -12,7 +12,8 @@ public class DeathCoordinates {
 
     public static void onPlayerDeath(ServerPlayer deadPlayer) {
         var config = LenientDeath.CONFIG.instance().deathCoordinates;
-        MinecraftServer server = deadPlayer.server;
+        MinecraftServer server = deadPlayer.getServer();
+        if (server == null) return;
 
         BlockPos coordinates = deadPlayer.blockPosition();
 
@@ -35,7 +36,7 @@ public class DeathCoordinates {
 
         if (config.sendToOtherAdmins) {
             for (var otherPlayer : server.getPlayerList().getPlayers()) {
-                if (otherPlayer != deadPlayer && server.getPlayerList().isOp(otherPlayer.getGameProfile())) {
+                if (otherPlayer != deadPlayer && otherPlayer.hasPermissions(2)) {
                     otherPlayer.sendSystemMessage(othersMessage);
                 }
             }
