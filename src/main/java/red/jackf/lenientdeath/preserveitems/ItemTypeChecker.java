@@ -32,20 +32,18 @@ public class ItemTypeChecker {
         Equippable equippable = stack.get(DataComponents.EQUIPPABLE);
         if (equippable != null) {
             boolean specificEquipment = false;
-            if (item instanceof ArmorItem) {
-                TypeBehavior mod = switch (equippable.slot()) {
-                    case HEAD -> config.helmets;
-                    case CHEST -> config.chestplates;
-                    case LEGS -> config.leggings;
-                    case FEET -> config.boots;
-                    case BODY -> config.body;
-                    default -> null;
-                };
+            TypeBehavior mod = switch (equippable.slot()) {
+                case HEAD -> config.helmets;
+                case CHEST -> config.chestplates;
+                case LEGS -> config.leggings;
+                case FEET -> config.boots;
+                case BODY -> config.body;
+                default -> null;
+            };
 
-                if (mod != null) {
-                    result = result.and(mod);
-                    specificEquipment = true;
-                }
+            if (mod != null) {
+                result = result.and(mod);
+                specificEquipment = true;
             }
             if (stack.has(DataComponents.GLIDER)) {
                 result = result.and(config.elytras);
@@ -60,7 +58,7 @@ public class ItemTypeChecker {
 
         if (FabricLoader.getInstance().isModLoaded("trinkets") && TrinketsCompat.isTrinket(player, stack)) result = result.and(config.trinkets);
 
-        if (item instanceof SwordItem) result = result.and(config.swords);
+        if (stack.has(DataComponents.WEAPON)) result = result.and(config.swords);
         if (item instanceof TridentItem) result = result.and(config.tridents);
         if (item instanceof MaceItem) result = result.and(config.maces);
 
@@ -69,14 +67,10 @@ public class ItemTypeChecker {
             else if (item instanceof CrossbowItem) result = result.and(config.crossbows);
             else result = result.and(config.otherProjectileLaunchers);
 
-        if (item instanceof DiggerItem)
-            if (item instanceof PickaxeItem) result = result.and(config.pickaxes);
-            else if (item instanceof ShovelItem) result = result.and(config.shovels);
-            else if (item instanceof AxeItem) result = result.and(config.axes);
-            else if (item instanceof HoeItem) result = result.and(config.hoes);
-            else result = result.and(config.otherDiggingItems);
-        else
-            if (OTHER_TOOLS_ANIMS.contains(stack.getUseAnimation())) result = result.and(config.otherTools);
+        if (stack.has(DataComponents.TOOL))
+            result = result.and(config.otherDiggingItems);
+        else if (OTHER_TOOLS_ANIMS.contains(stack.getUseAnimation()))
+            result = result.and(config.otherTools);
 
         if (item instanceof BucketItem) result = result.and(config.buckets);
 

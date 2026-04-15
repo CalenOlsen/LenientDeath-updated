@@ -44,8 +44,8 @@ public class RestoreInventory {
             }
         }
 
-        if (data != null && data.contains(DEATHS, CompoundTag.TAG_LIST)) {
-            ListTag list = data.getList(DEATHS, Tag.TAG_COMPOUND);
+        if (data != null && data.contains(DEATHS)) {
+            ListTag list = data.getList(DEATHS).orElseGet(ListTag::new);
 
             for (Tag tag : list) {
                 if (tag instanceof CompoundTag recordTag) {

@@ -73,15 +73,7 @@ public class CommandConfig {
     }
 
     private static Component optionTitle(String name, String fullName, String baseWikiPage) {
-        return Formatting.variable(literal(name).withStyle(Style.EMPTY.withHoverEvent(
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                               Component.empty()
-                                        .append(Formatting.variable("$." + fullName))
-                                        .append(CommonComponents.NEW_LINE)
-                                        .append(translatable("lenientdeath.command.config.clickToOpenWiki")))
-        ).withClickEvent(
-                new ClickEvent(ClickEvent.Action.OPEN_URL, makeWikiLink(baseWikiPage, fullName))
-        )));
+        return Formatting.variable(literal(name));
     }
 
     //////////////
