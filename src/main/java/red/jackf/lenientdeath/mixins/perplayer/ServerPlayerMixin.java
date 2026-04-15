@@ -2,11 +2,11 @@ package red.jackf.lenientdeath.mixins.perplayer;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,13 +38,13 @@ public abstract class ServerPlayerMixin extends Player implements LDPerPlayer {
         this.perPlayerEnabledForMe = newValue;
     }
 
-    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void lenientdeath$getModData(CompoundTag tag, CallbackInfo ci) {
-        this.perPlayerEnabledForMe = tag.getBoolean(PER_PLAYER_TAG_KEY).orElse(this.perPlayerEnabledForMe);
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueInput;)V", at = @At("RETURN"))
+    private void lenientdeath$getModData(ValueInput valueInput, CallbackInfo ci) {
+        this.perPlayerEnabledForMe = valueInput.getBooleanOr(PER_PLAYER_TAG_KEY, this.perPlayerEnabledForMe);
     }
 
-    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
-    private void lenientdeath$addModData(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
-        tag.putBoolean(PER_PLAYER_TAG_KEY, this.perPlayerEnabledForMe);
+    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueOutput;)V", at = @At("RETURN"))
+    private void lenientdeath$addModData(ValueOutput valueOutput, CallbackInfo ci) {
+        valueOutput.putBoolean(PER_PLAYER_TAG_KEY, this.perPlayerEnabledForMe);
     }
 }

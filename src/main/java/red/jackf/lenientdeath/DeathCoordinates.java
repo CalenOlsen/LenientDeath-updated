@@ -12,7 +12,7 @@ public class DeathCoordinates {
 
     public static void onPlayerDeath(ServerPlayer deadPlayer) {
         var config = LenientDeath.CONFIG.instance().deathCoordinates;
-        MinecraftServer server = deadPlayer.getServer();
+        MinecraftServer server = deadPlayer.level().getServer();
         if (server == null) return;
 
         BlockPos coordinates = deadPlayer.blockPosition();

@@ -9,7 +9,7 @@ import red.jackf.UpdateDependenciesTask
 
 plugins {
 	id("maven-publish")
-	id("fabric-loom") version "1.12.0-alpha.25"
+	id("fabric-loom") version "1.12.7"
 	id("com.github.breadmoirai.github-release") version "2.4.1"
 	id("org.ajoberstar.grgit") version "5.2.1"
 	id("me.modmuss50.mod-publish-plugin") version "0.3.3"
@@ -124,7 +124,9 @@ loom {
 	log4jConfigs.from(file("log4j2.xml"))
 
 	runConfigs.configureEach {
-		programArgs.addAll("--username JackFred".split(" "))
+		if (name == "client") {
+			programArgs.addAll("--username JackFred".split(" "))
+		}
 	}
 
 	//accessWidenerPath.set(file("src/main/resources/lenientdeath.accesswidener"))
@@ -145,8 +147,6 @@ dependencies {
 	})
 	modImplementation("net.fabricmc:fabric-loader:${properties["loader_version"]}")
 
-	include(modImplementation("me.lucko:fabric-permissions-api:${properties["fabric_permissions_api_version"]}")!!)
-	include(modImplementation("xyz.nucleoid:server-translations-api:${properties["server_translations_api_version"]}")!!)
 	include(modImplementation("red.jackf.jackfredlib:jackfredlib-base:${properties["jflib_base_version"]}")!!)
 	include(modImplementation("red.jackf.jackfredlib:jackfredlib-config:${properties["jflib_config_version"]}")!!)
 	include(modImplementation("red.jackf.jackfredlib:jackfredlib-colour:${properties["jflib_colour_version"]}")!!)
@@ -258,8 +258,6 @@ if (canPublish) {
 			// Add a bundled block for each module version
 			prologue.set(changelogHeader + """
 				|Bundled:
-				|  - Fabric Permissions API: ${properties["fabric_permissions_api_version"]}
-				|  - Server Translations API: ${properties["server_translations_api_version"]}
 				|  - JackFredLib: Base: ${properties["jflib_base_version"]}
 				|  - JackFredLib: Config: ${properties["jflib_config_version"]}
 				|  - JackFredLib: Colour: ${properties["jflib_colour_version"]}
@@ -326,11 +324,6 @@ if (canPublish) {
 					displayName.set("${properties["prefix"]!!} ${properties["mod_name"]!!} ${version.get()}")
 					listOf("fabric-api").forEach {
 						requires {
-							slug.set(it)
-						}
-					}
-					listOf("server-translation-api").forEach {
-						embeds {
 							slug.set(it)
 						}
 					}

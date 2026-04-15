@@ -35,13 +35,13 @@ public class ItemGlow {
                 .onTick(ItemGlow::itemGlowLieTickCallback);
 
         switch (config.glowVisibility) {
-            case everyone -> builder.createAndShow(player.getServer().getPlayerList().getPlayers());
+            case everyone -> builder.createAndShow(player.level().getServer().getPlayerList().getPlayers());
             case dead_player -> builder.createAndShow(player);
             case dead_player_and_team -> {
                 if (!config.noTeamIsValidTeam && player.getTeam() == null) {
                     builder.createAndShow(player);
                 } else {
-                    builder.createAndShow(player.getServer().getPlayerList()
+                    builder.createAndShow(player.level().getServer().getPlayerList()
                                                        .getPlayers()
                                                        .stream()
                                                        .filter(otherPlayer -> otherPlayer.getTeam() == player.getTeam())

@@ -57,7 +57,7 @@ public class InventoryMixin {
         slot.set(-1); // prevent off by one errors
     }
 
-    @Inject(method = "dropAll", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;", shift = At.Shift.BEFORE))
+    @Inject(method = "dropAll", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/NonNullList;get(I)Ljava/lang/Object;", shift = At.Shift.BEFORE))
     private void incrementCount(CallbackInfo ci, @Share("ldSlotCount") LocalIntRef slot) {
         slot.set(slot.get() + 1);
     }

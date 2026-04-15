@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,9 +18,11 @@ import red.jackf.lenientdeath.api.LenientDeathAPI;
 @Pseudo
 public class LivingEntityTrinketsMixin {
     @SuppressWarnings({"UnresolvedMixinReference", "MixinAnnotationTarget"})
+    @Dynamic("dropFromEntity is added to LivingEntity by Trinkets' LivingEntityMixin")
     @WrapOperation(
             method = "dropFromEntity",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;"),
+            remap = false,
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", remap = true),
             require = 0)
     private ItemEntity lenientdeath$handleTrinketsItemEntities(Player player, ItemStack stack, boolean dropAround, boolean throwerName, Operation<ItemEntity> original) {
         ItemEntity entity = original.call(player, stack, dropAround, throwerName);

@@ -2,8 +2,6 @@ package red.jackf.lenientdeath.mixins.itemresilience;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -12,6 +10,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,15 +43,15 @@ public abstract class ItemEntityMixin extends Entity implements LDDeathDropMarka
     }
 
     // read grounded position
-    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void loadDeathDropMark(CompoundTag tag, CallbackInfo ci) {
-        this.isDeathDropItem = tag.getBoolean(IS_DEATH_DROP_ITEM).orElse(false);
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueInput;)V", at = @At("RETURN"))
+    private void loadDeathDropMark(ValueInput valueInput, CallbackInfo ci) {
+        this.isDeathDropItem = valueInput.getBooleanOr(IS_DEATH_DROP_ITEM, false);
     }
 
     // save grounded position
-    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
-    private void saveDeathDropMark(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
-        tag.putBoolean(IS_DEATH_DROP_ITEM, this.isDeathDropItem);
+    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueOutput;)V", at = @At("RETURN"))
+    private void saveDeathDropMark(ValueOutput valueOutput, CallbackInfo ci) {
+        valueOutput.putBoolean(IS_DEATH_DROP_ITEM, this.isDeathDropItem);
     }
 
     // dont merge non-death drop item with death drop item

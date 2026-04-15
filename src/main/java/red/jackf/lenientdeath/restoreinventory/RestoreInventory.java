@@ -27,7 +27,7 @@ public class RestoreInventory {
     }
 
     private static Path getPlayerDeathHistoryPath(ServerPlayer player) {
-        return getDeathHistoryDir(player.getServer()).resolve(player.getStringUUID() + ".dat");
+        return getDeathHistoryDir(player.level().getServer()).resolve(player.getStringUUID() + ".dat");
     }
 
     public List<DeathRecord> getDeathHistory(ServerPlayer player) {
@@ -68,7 +68,7 @@ public class RestoreInventory {
         }
 
         try {
-            Path directory = getDeathHistoryDir(player.getServer());
+            Path directory = getDeathHistoryDir(player.level().getServer());
             Files.createDirectories(directory);
             Path temp = Files.createTempFile(directory, player.getStringUUID() + "-", ".dat");
             NbtIo.writeCompressed(root, temp);

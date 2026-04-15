@@ -2,15 +2,14 @@ package red.jackf.lenientdeath.mixins.movetooriginalslots;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,17 +40,15 @@ public abstract class ItemEntityMixin extends Entity implements LDRemembersSlot 
         this.slot = OptionalInt.of(slot);
     }
 
-    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void lenientdeath$getModData(CompoundTag tag, CallbackInfo ci) {
-        if (tag.contains(LD_REMEMBERED_SLOT)) {
-            this.slot = tag.getInt(LD_REMEMBERED_SLOT).stream().findFirst().map(OptionalInt::of).orElse(OptionalInt.empty());
-        }
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueInput;)V", at = @At("RETURN"))
+    private void lenientdeath$getModData(ValueInput valueInput, CallbackInfo ci) {
+        this.slot = valueInput.getInt(LD_REMEMBERED_SLOT).map(OptionalInt::of).orElse(OptionalInt.empty());
     }
 
-    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
-    private void lenientdeath$addModData(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
+    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueOutput;)V", at = @At("RETURN"))
+    private void lenientdeath$addModData(ValueOutput valueOutput, CallbackInfo ci) {
         if (slot.isPresent()) {
-            tag.putInt(LD_REMEMBERED_SLOT, slot.getAsInt());
+            valueOutput.putInt(LD_REMEMBERED_SLOT, slot.getAsInt());
         }
     }
 
