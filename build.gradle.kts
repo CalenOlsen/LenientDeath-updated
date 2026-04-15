@@ -9,7 +9,7 @@ import red.jackf.UpdateDependenciesTask
 
 plugins {
 	id("maven-publish")
-	id("fabric-loom") version "1.8-SNAPSHOT"
+	id("fabric-loom") version "1.12.0-alpha.25"
 	id("com.github.breadmoirai.github-release") version "2.4.1"
 	id("org.ajoberstar.grgit") version "5.2.1"
 	id("me.modmuss50.mod-publish-plugin") version "0.3.3"
@@ -105,6 +105,7 @@ repositories {
 			includeGroupAndSubgroups("red.jackf")
 		}
 	}
+
 }
 
 java {
@@ -158,13 +159,15 @@ dependencies {
 
 	// For some reason, trinkets (+CCA) gets added to the IDEA run configs even if it's just compileOnly. To mitigate this,
 	// use ./gradlew runClient. If you know why this happens, please let me know.
-	modCompileOnly("dev.emi:trinkets:${properties["trinkets_version"]}") {}
-	/*modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${properties["cardinal-components-api_version"]}") {
+	modCompileOnly("dev.emi:trinkets:${properties["trinkets_version"]}") {
 		isTransitive = false
 	}
-	modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${properties["cardinal-components-api_version"]}") {
+	modCompileOnly("org.ladysnake.cardinal-components-api:cardinal-components-base:${properties["cca_version"]}") {
 		isTransitive = false
-	}*/
+	}
+	modCompileOnly("org.ladysnake.cardinal-components-api:cardinal-components-entity:${properties["cca_version"]}") {
+		isTransitive = false
+	}
 
 	//modLocalRuntime("dev.emi:trinkets:${properties["trinkets_version"]}")
 	//modLocalRuntime("org.ladysnake.cardinal-components-api:cardinal-components-base:${properties["cca_version"]}")

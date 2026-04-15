@@ -162,9 +162,11 @@ public class RestoreInventory {
     }
 
     private static long countItems(Inventory inventory) {
-        return Streams.concat(inventory.items.stream(), inventory.armor.stream(), inventory.offhand.stream())
-                .filter(stack -> !stack.isEmpty())
-                .count();
+        long count = 0;
+        for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+            if (!inventory.getItem(slot).isEmpty()) count += 1;
+        }
+        return count;
     }
 
     private static long countTrinkets(TrinketsRecord inventory) {
@@ -208,7 +210,7 @@ public class RestoreInventory {
                         Component.literal(dimensionText).withStyle(Formatting.VARIABLE)));
         lines.add(secondLine);
 
-        String playerName = player.getGameProfile().getName();
+        String playerName = player.getName().getString();
         String restoreCommand = "/ld deaths restore " + playerName + " " + index;
         String replaceCommand = restoreCommand + " replace";
 
