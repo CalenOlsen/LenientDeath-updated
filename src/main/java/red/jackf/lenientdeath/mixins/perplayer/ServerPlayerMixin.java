@@ -2,6 +2,7 @@ package red.jackf.lenientdeath.mixins.perplayer;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -42,8 +43,8 @@ public abstract class ServerPlayerMixin extends Player implements LDPerPlayer {
         this.perPlayerEnabledForMe = tag.getBoolean(PER_PLAYER_TAG_KEY).orElse(this.perPlayerEnabledForMe);
     }
 
-    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void lenientdeath$addModData(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V", at = @At("RETURN"))
+    private void lenientdeath$addModData(CompoundTag tag, HolderLookup.Provider provider, CallbackInfo ci) {
         tag.putBoolean(PER_PLAYER_TAG_KEY, this.perPlayerEnabledForMe);
     }
 }

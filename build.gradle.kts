@@ -106,6 +106,10 @@ repositories {
 		}
 	}
 
+	// Local jars (e.g. manual CCA testing)
+	flatDir {
+		dirs("libs")
+	}
 }
 
 java {
